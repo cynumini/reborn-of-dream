@@ -1,0 +1,217 @@
+[gd_scene load_steps=23 format=3 uid="uid://i8bb5i3acjwl"]
+
+[ext_resource type="Script" uid="uid://bocnvyb4h0i2b" path="res://player.gd" id="1_e2o6t"]
+[ext_resource type="Script" uid="uid://cei7vrl7peu2d" path="res://game.gd" id="1_ryrav"]
+[ext_resource type="Texture2D" uid="uid://26mdf7f5aofo" path="res://sprites/player.png" id="2_feb5d"]
+[ext_resource type="PackedScene" uid="uid://bxne71ykr2njk" path="res://rice_bowl.tscn" id="2_ryrav"]
+[ext_resource type="PackedScene" uid="uid://dg8g2ob2oowuk" path="res://tile_map_layer.tscn" id="3_eow3j"]
+[ext_resource type="PackedScene" uid="uid://csrmii1bi0ykj" path="res://fish.tscn" id="3_j5wjh"]
+[ext_resource type="Texture2D" uid="uid://cjwfeqb2critu" path="res://sprites/rice_bowl.png" id="4_7jktm"]
+[ext_resource type="Script" uid="uid://fcbpvylcgkp7" path="res://ui.gd" id="5_7jktm"]
+[ext_resource type="Texture2D" uid="uid://biffye0p747fd" path="res://sprites/clock.png" id="8_hve3p"]
+[ext_resource type="Texture2D" uid="uid://dtpt4io8sux6p" path="res://sprites/fish.png" id="9_vef74"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hqtel"]
+atlas = ExtResource("2_feb5d")
+region = Rect2(0, 0, 20, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sweqy"]
+atlas = ExtResource("2_feb5d")
+region = Rect2(20, 0, 20, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2hs0m"]
+atlas = ExtResource("2_feb5d")
+region = Rect2(40, 0, 20, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1jxqw"]
+atlas = ExtResource("2_feb5d")
+region = Rect2(0, 0, 20, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dw050"]
+atlas = ExtResource("2_feb5d")
+region = Rect2(60, 0, 20, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b26j0"]
+atlas = ExtResource("2_feb5d")
+region = Rect2(80, 0, 20, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n7ghd"]
+atlas = ExtResource("2_feb5d")
+region = Rect2(100, 0, 20, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nvl01"]
+atlas = ExtResource("2_feb5d")
+region = Rect2(120, 0, 20, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ivps1"]
+atlas = ExtResource("2_feb5d")
+region = Rect2(140, 0, 20, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_urp6f"]
+atlas = ExtResource("2_feb5d")
+region = Rect2(160, 0, 20, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bwjto"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hqtel")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sweqy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hqtel")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2hs0m")
+}],
+"loop": true,
+"name": &"down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1jxqw")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dw050")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b26j0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dw050")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n7ghd")
+}],
+"loop": true,
+"name": &"right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nvl01")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ivps1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nvl01")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_urp6f")
+}],
+"loop": true,
+"name": &"up",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fc0e3"]
+radius = 4.0
+height = 16.0
+
+[node name="Game" type="Node2D" node_paths=PackedStringArray("level", "player")]
+script = ExtResource("1_ryrav")
+rice_bowl_scene = ExtResource("2_ryrav")
+fish_scene = ExtResource("3_j5wjh")
+level = NodePath("Level")
+player = NodePath("Level/Player")
+
+[node name="Level" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="TileMapLayer" parent="Level" instance=ExtResource("3_eow3j")]
+
+[node name="Player" type="CharacterBody2D" parent="Level" node_paths=PackedStringArray("animated_sprite_2d")]
+position = Vector2(133, 86)
+script = ExtResource("1_e2o6t")
+animated_sprite_2d = NodePath("AnimatedSprite2D")
+metadata/_edit_group_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Level/Player"]
+texture_filter = 1
+position = Vector2(0, -12)
+sprite_frames = SubResource("SpriteFrames_bwjto")
+animation = &"idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Level/Player"]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_fc0e3")
+
+[node name="UI" type="MarginContainer" parent="." node_paths=PackedStringArray("game", "rice_bowl_count", "fish_count", "time_label", "won_dialog")]
+offset_right = 128.0
+offset_bottom = 23.0
+script = ExtResource("5_7jktm")
+game = NodePath("..")
+rice_bowl_count = NodePath("Control/RiceBowlCount")
+fish_count = NodePath("Control/FishCount")
+time_label = NodePath("Control/TimeLabel")
+won_dialog = NodePath("AcceptDialog")
+
+[node name="Control" type="HBoxContainer" parent="UI"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TimerIcon" type="TextureRect" parent="UI/Control"]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("8_hve3p")
+stretch_mode = 5
+
+[node name="TimeLabel" type="Label" parent="UI/Control"]
+layout_mode = 2
+text = "Seconds left: 0"
+
+[node name="RiceBowlIcon" type="TextureRect" parent="UI/Control"]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("4_7jktm")
+stretch_mode = 5
+
+[node name="RiceBowlCount" type="Label" parent="UI/Control"]
+layout_mode = 2
+text = "Rice bowls: 10"
+
+[node name="FishIcon" type="TextureRect" parent="UI/Control"]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("9_vef74")
+stretch_mode = 5
+
+[node name="FishCount" type="Label" parent="UI/Control"]
+layout_mode = 2
+text = "Fish bowls: 10"
+
+[node name="AcceptDialog" type="AcceptDialog" parent="UI"]
+title = "You won"
+initial_position = 2
+size = Vector2i(228, 100)
+dialog_text = "You collected 10 fish."
+
+[node name="Help" type="AcceptDialog" parent="UI"]
+title = "Guide"
+initial_position = 2
+size = Vector2i(178, 132)
+visible = true
+dialog_text = "5 rice bowls = 1 fish.
+You need 10 fish.
+Good luck!"
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="state_changed" from="." to="UI" method="_on_game_state_changed"]
+[connection signal="won" from="." to="Level/Player" method="_on_game_won"]
+[connection signal="won" from="." to="UI" method="_on_game_won"]
+[connection signal="canceled" from="UI/AcceptDialog" to="UI" method="_on_accept_dialog_closed"]
+[connection signal="confirmed" from="UI/AcceptDialog" to="UI" method="_on_accept_dialog_closed"]
+[connection signal="canceled" from="UI/Help" to="." method="_on_help_dialog_closed"]
+[connection signal="confirmed" from="UI/Help" to="." method="_on_help_dialog_closed"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
