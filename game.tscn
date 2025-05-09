@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://i8bb5i3acjwl"]
+[gd_scene load_steps=24 format=3 uid="uid://i8bb5i3acjwl"]
 
 [ext_resource type="Script" uid="uid://bocnvyb4h0i2b" path="res://player.gd" id="1_e2o6t"]
 [ext_resource type="Script" uid="uid://cei7vrl7peu2d" path="res://game.gd" id="1_ryrav"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dg8g2ob2oowuk" path="res://tile_map_layer.tscn" id="3_eow3j"]
 [ext_resource type="PackedScene" uid="uid://csrmii1bi0ykj" path="res://fish.tscn" id="3_j5wjh"]
 [ext_resource type="Texture2D" uid="uid://cjwfeqb2critu" path="res://sprites/rice_bowl.png" id="4_7jktm"]
+[ext_resource type="Texture2D" uid="uid://crmxrvypvfwyt" path="res://map/world_map.png" id="4_mfdv2"]
 [ext_resource type="Script" uid="uid://fcbpvylcgkp7" path="res://ui.gd" id="5_7jktm"]
 [ext_resource type="Texture2D" uid="uid://biffye0p747fd" path="res://sprites/clock.png" id="8_hve3p"]
 [ext_resource type="Texture2D" uid="uid://dtpt4io8sux6p" path="res://sprites/fish.png" id="9_vef74"]
@@ -124,13 +125,16 @@ fish_scene = ExtResource("3_j5wjh")
 level = NodePath("Level")
 player = NodePath("Level/Player")
 
+[node name="WorldMap" type="Sprite2D" parent="."]
+scale = Vector2(4, 4)
+texture = ExtResource("4_mfdv2")
+
 [node name="Level" type="Node2D" parent="."]
 y_sort_enabled = true
 
 [node name="TileMapLayer" parent="Level" instance=ExtResource("3_eow3j")]
 
 [node name="Player" type="CharacterBody2D" parent="Level" node_paths=PackedStringArray("animated_sprite_2d")]
-position = Vector2(133, 86)
 script = ExtResource("1_e2o6t")
 animated_sprite_2d = NodePath("AnimatedSprite2D")
 metadata/_edit_group_ = true
@@ -145,57 +149,63 @@ animation = &"idle"
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_fc0e3")
 
-[node name="UI" type="MarginContainer" parent="." node_paths=PackedStringArray("game", "rice_bowl_count", "fish_count", "time_label", "won_dialog")]
-offset_right = 128.0
+[node name="Camera2D" type="Camera2D" parent="Level/Player"]
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="UI" type="MarginContainer" parent="CanvasLayer" node_paths=PackedStringArray("game", "rice_bowl_count", "fish_count", "time_label", "won_dialog")]
+offset_right = 396.0
 offset_bottom = 23.0
 script = ExtResource("5_7jktm")
-game = NodePath("..")
+game = NodePath("../..")
 rice_bowl_count = NodePath("Control/RiceBowlCount")
 fish_count = NodePath("Control/FishCount")
 time_label = NodePath("Control/TimeLabel")
 won_dialog = NodePath("AcceptDialog")
 
-[node name="Control" type="HBoxContainer" parent="UI"]
+[node name="Control" type="HBoxContainer" parent="CanvasLayer/UI"]
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="TimerIcon" type="TextureRect" parent="UI/Control"]
+[node name="TimerIcon" type="TextureRect" parent="CanvasLayer/UI/Control"]
 texture_filter = 1
 layout_mode = 2
 texture = ExtResource("8_hve3p")
 stretch_mode = 5
 
-[node name="TimeLabel" type="Label" parent="UI/Control"]
+[node name="TimeLabel" type="Label" parent="CanvasLayer/UI/Control"]
 layout_mode = 2
 text = "Seconds left: 0"
 
-[node name="RiceBowlIcon" type="TextureRect" parent="UI/Control"]
+[node name="RiceBowlIcon" type="TextureRect" parent="CanvasLayer/UI/Control"]
 texture_filter = 1
 layout_mode = 2
 texture = ExtResource("4_7jktm")
 stretch_mode = 5
 
-[node name="RiceBowlCount" type="Label" parent="UI/Control"]
+[node name="RiceBowlCount" type="Label" parent="CanvasLayer/UI/Control"]
 layout_mode = 2
 text = "Rice bowls: 10"
 
-[node name="FishIcon" type="TextureRect" parent="UI/Control"]
+[node name="FishIcon" type="TextureRect" parent="CanvasLayer/UI/Control"]
 texture_filter = 1
 layout_mode = 2
 texture = ExtResource("9_vef74")
 stretch_mode = 5
 
-[node name="FishCount" type="Label" parent="UI/Control"]
+[node name="FishCount" type="Label" parent="CanvasLayer/UI/Control"]
 layout_mode = 2
 text = "Fish bowls: 10"
 
-[node name="AcceptDialog" type="AcceptDialog" parent="UI"]
+[node name="AcceptDialog" type="AcceptDialog" parent="CanvasLayer/UI"]
 title = "You won"
 initial_position = 2
 size = Vector2i(228, 100)
 dialog_text = "You collected 10 fish."
 
-[node name="Help" type="AcceptDialog" parent="UI"]
+[node name="Help" type="AcceptDialog" parent="CanvasLayer/UI"]
 title = "Guide"
 initial_position = 2
 size = Vector2i(178, 132)
@@ -204,14 +214,11 @@ dialog_text = "5 rice bowls = 1 fish.
 You need 10 fish.
 Good luck!"
 
-[node name="Timer" type="Timer" parent="."]
-autostart = true
-
-[connection signal="state_changed" from="." to="UI" method="_on_game_state_changed"]
+[connection signal="state_changed" from="." to="CanvasLayer/UI" method="_on_game_state_changed"]
 [connection signal="won" from="." to="Level/Player" method="_on_game_won"]
-[connection signal="won" from="." to="UI" method="_on_game_won"]
-[connection signal="canceled" from="UI/AcceptDialog" to="UI" method="_on_accept_dialog_closed"]
-[connection signal="confirmed" from="UI/AcceptDialog" to="UI" method="_on_accept_dialog_closed"]
-[connection signal="canceled" from="UI/Help" to="." method="_on_help_dialog_closed"]
-[connection signal="confirmed" from="UI/Help" to="." method="_on_help_dialog_closed"]
+[connection signal="won" from="." to="CanvasLayer/UI" method="_on_game_won"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="canceled" from="CanvasLayer/UI/AcceptDialog" to="CanvasLayer/UI" method="_on_accept_dialog_closed"]
+[connection signal="confirmed" from="CanvasLayer/UI/AcceptDialog" to="CanvasLayer/UI" method="_on_accept_dialog_closed"]
+[connection signal="canceled" from="CanvasLayer/UI/Help" to="." method="_on_help_dialog_closed"]
+[connection signal="confirmed" from="CanvasLayer/UI/Help" to="." method="_on_help_dialog_closed"]
