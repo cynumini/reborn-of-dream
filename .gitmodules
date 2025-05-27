@@ -1,0 +1,3 @@
+[submodule "external/sakana"]
+	path = external/sakana
+	url = git@github.com:cynumini/sakana.git
