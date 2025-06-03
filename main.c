@@ -8,6 +8,8 @@ int main(void) {
 
   SetTargetFPS(60);
 
+  Texture belt = LoadTexture("./assets/belt.png");
+
   while (!WindowShouldClose()) {
     // Update
 
@@ -17,6 +19,8 @@ int main(void) {
     ClearBackground(RAYWHITE);
 
     DrawText("Reborn of Dream", 310, 200, 20, LIGHTGRAY);
+
+    DrawTexture(belt, 100, 100, WHITE);
 
     EndDrawing();
   }
