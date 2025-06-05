@@ -1,4 +1,7 @@
+#include <stdio.h>
+
 #include "raylib.h"
+#include "raymath.h"
 
 int main(void) {
   const int screenWidth = 800;
@@ -8,10 +11,16 @@ int main(void) {
 
   SetTargetFPS(60);
 
-  Texture belt = LoadTexture("./assets/belt.png");
+  const Texture belt = LoadTexture("./assets/belt.png");
+  Vector2 belt_position = Vector2Zero();
 
   while (!WindowShouldClose()) {
     // Update
+    if (IsMouseButtonPressed(0)) {
+      const Vector2 mouse_position = GetMousePosition();
+      belt_position = mouse_position;
+      printf("fuck %f %f\n", mouse_position.x, mouse_position.y);
+    }
 
     // Draw
     BeginDrawing();
@@ -20,7 +29,7 @@ int main(void) {
 
     DrawText("Reborn of Dream", 310, 200, 20, LIGHTGRAY);
 
-    DrawTexture(belt, 100, 100, WHITE);
+    DrawTexture(belt, belt_position.x, belt_position.y, WHITE);
 
     EndDrawing();
   }
