@@ -1,58 +1,17 @@
-# Prerequisites
-*.d
+# Godot 4+ specific ignores
+.godot/
+.nomedia
 
-# Object files
-*.o
-*.ko
-*.obj
-*.elf
+# Godot-specific ignores
+.import/
+export.cfg
+export_credentials.cfg
+*.tmp
 
-# Linker output
-*.ilk
-*.map
-*.exp
+# Imported translations (automatically generated from CSV files)
+*.translation
 
-# Precompiled Headers
-*.gch
-*.pch
-
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
-
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
-
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
-
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
-
-# debug information files
-*.dwo
-
-# Project specific
-out/
+# Mono-specific ignores
+.mono/
+data_*/
+mono_crash.*.json
