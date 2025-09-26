@@ -22,10 +22,16 @@ func put():
 		world.map[grid_position] = belt_scene.instantiate()
 		world.map[grid_position].position = Vector2(grid_position * 32) + Vector2(16, 16)
 		world.map[grid_position].rotation = rotation_rad
-		world.map[grid_position].direction = Vector2(-sin(rotation_rad), cos(rotation_rad))
+		world.map[grid_position].direction = Vector2i(round(-sin(rotation_rad)), round(cos(rotation_rad)))
 		world.map[grid_position].world = world
 		world.map[grid_position].id = grid_position
+		world.belt_placed_first_pass.connect(world.map[grid_position]._on_belt_placed_first_pass)
+		world.belt_placed_second_pass.connect(world.map[grid_position]._on_belt_placed_second_pass)
 		world.add_child(world.map[grid_position])
+		world.belt_placed_first_pass.emit()
+		world.belt_placed_second_pass.emit()
+		for item in world.get_item_in_cells(grid_position):
+			world.map[grid_position].add_item(item)
 
 
 func remove():

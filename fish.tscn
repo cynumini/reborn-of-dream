@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://b5eppi0y0ky6o" path="res://assets/sprites/fish.png" id="1_hgn23"]
 [ext_resource type="Script" uid="uid://c5xa6d3n2ktxc" path="res://fish.gd" id="2_6ik3a"]
 
-[node name="Fish" type="Sprite2D"]
+[node name="Fish" type="Sprite2D" groups=["items"]]
 z_index = 1
 texture_filter = 1
 texture = ExtResource("1_hgn23")
