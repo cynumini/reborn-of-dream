@@ -46,16 +46,27 @@ func sort_item(a: Node2D, b: Node2D, belt_direction):
 			return a.position.x > b.position.x
 
 
-func _process(delta: float) -> void:
-	var end_of_belt = position - Vector2(direction * 15.99)
-	var item_target = end_of_belt
+func _physics_process(delta: float) -> void:
+	if len(items) == 0: return
+	var cell_id = Vector2i(position / 32)
 	items.sort_custom(sort_item.bind(direction))
-	for item in items:
-		if item.position == end_of_belt and next_belt and next_belt.can_add():
+	var next_item_position = Vector2.ZERO
+	var new_items: Array[Sprite2D] = []
+	while items:
+		var item = items.pop_front()
+		var next_position = item.position - Vector2(direction * 100 * delta)
+		var next_position_cell = Vector2i(next_position / 32)
+		if cell_id == next_position_cell: # move on belt
+			if next_item_position == Vector2.ZERO or next_position.distance_to(next_item_position) > 8:
+				item.move(next_position)
+			new_items.append(item)
+		elif next_belt and next_belt.can_add(): # move to next belt
+			item.move(next_position)
 			next_belt.add_item(item)
-			items.erase(item)
-		item.position = item.position.move_toward(item_target, 100 * delta)
-		item_target = item.position + Vector2(direction * 8)
+		else:
+			new_items.append(item) # stop at end
+		next_item_position = next_position
+	items = new_items
 
 
 func _on_belt_placed_first_pass():
