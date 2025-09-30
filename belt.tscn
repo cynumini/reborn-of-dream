@@ -1,9 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://dsa0a6ghmscda"]
+[gd_scene load_steps=2 format=3 uid="uid://dsa0a6ghmscda"]
 
-[ext_resource type="Texture2D" uid="uid://5h2iujov3nc6" path="res://assets/belt.png" id="1_susb0"]
-[ext_resource type="Script" uid="uid://dvblro4oxo3uw" path="res://belt.gd" id="2_rfspg"]
+[ext_resource type="Script" uid="uid://dvblro4oxo3uw" path="res://scripts/belt.gd" id="2_rfspg"]
 
-[node name="Belt" type="Sprite2D"]
+[node name="Belt" type="Sprite2D" groups=["belts"]]
 texture_filter = 1
-texture = ExtResource("1_susb0")
 script = ExtResource("2_rfspg")
